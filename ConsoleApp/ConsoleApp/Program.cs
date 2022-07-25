@@ -1,7 +1,6 @@
 ﻿using ConsoleApp.AcessoBanco;
 using ConsoleApp.Model;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace ConsoleApp
@@ -23,8 +22,10 @@ namespace ConsoleApp
                         "\n5-Cadastrar Linha" +
                         "\n6-Listar Linha" +
                         "\n7-Buscar nome do motorista pela capacidade do onibus: " +
-                        "\n8-Buscar o onibus de maior capacidade: ");
-                    Console.WriteLine("Opção desejada: ");
+                        "\n8-Buscar o onibus de maior capacidade: " +
+                        "\n9-Buscar quantidade de linhas para cada onibus: ");
+                    //"\n10-Buscar o onibus de maior capacidade: ");
+                    Console.Write("Opção desejada: ");
                     opcao = int.Parse(Console.ReadLine());
                     switch (opcao)
                     {
@@ -54,7 +55,11 @@ namespace ConsoleApp
                         case 8:
                             BuscarOnibusMaiorCapacidade();
                             break;
+                        case 9:
+                            BuscarOnibusLinhas();
+                            break;
                         default:
+                            Console.WriteLine("Informe uma opção válida..");
                             break;
                     }
                     Console.WriteLine("Pressione qualquer tecla para continuar...");
@@ -86,9 +91,9 @@ namespace ConsoleApp
                 string email = Console.ReadLine();
                 Console.Write("CNH: ");
                 int cnh = int.Parse(Console.ReadLine());
-                Console.Write("Ativo: ");
+                Console.Write("Ativo(true/false): ");
                 bool ativo = bool.Parse(Console.ReadLine());
-                Console.Write("Data de Nascimento: ");
+                Console.Write("Data de Nascimento (dd/mm/aaaa): ");
                 DateTime dtNascimento = DateTime.Parse(Console.ReadLine());
 
                 Motorista motorista = new Motorista(cnh, nome, email, ativo, dtNascimento);
@@ -108,13 +113,7 @@ namespace ConsoleApp
             MotoristaDAO dao = new MotoristaDAO();
             List<Motorista> motoristas = dao.GetMotoristas();
             foreach (Motorista motorista in motoristas)
-            {
-                Console.WriteLine($"Nome: {motorista.Nome}");
-                Console.WriteLine($"CNH: {motorista.Cnh}");
-                Console.WriteLine($"Email: {motorista.Email}");
-                Console.WriteLine($"Ativo: {motorista.Ativo}");
-                Console.WriteLine($"Data de Nascimento: {motorista.DtNascimento}\n\n");
-            }
+                Console.WriteLine(motorista.ToString());
         }
 
         public static void BuscarMotoristaPelaCapacidade(int capacidade)
@@ -123,13 +122,7 @@ namespace ConsoleApp
             MotoristaDAO dao = new MotoristaDAO();
             List<Motorista> motoristas = dao.BuscarMotoristaPelaCapacidade(capacidade);
             foreach (Motorista motorista in motoristas)
-            {
-                Console.WriteLine($"Nome: {motorista.Nome}");
-                Console.WriteLine($"CNH: {motorista.Cnh}");
-                Console.WriteLine($"Email: {motorista.Email}");
-                Console.WriteLine($"Ativo: {motorista.Ativo}");
-                Console.WriteLine($"Data de Nascimento: {motorista.DtNascimento}\n\n");
-            }
+                Console.WriteLine(motorista.ToString());
         }
 
         #endregion
@@ -156,7 +149,7 @@ namespace ConsoleApp
 
                 Onibus onibus = new Onibus(cor, placa, modelo, observacao, capacidade);
                 dao.AdicionarOnibus(onibus);
-                Console.WriteLine("Onibus adicinado com sucesso!");
+                Console.WriteLine("Onibus adicionado com sucesso!");
 
             }
             catch (Exception ex)
@@ -170,13 +163,7 @@ namespace ConsoleApp
             OnibusDAO dao = new OnibusDAO();
             List<Onibus> onibus = dao.GetOnibus();
             foreach (Onibus o in onibus)
-            {
-                Console.WriteLine($"Modelo: {o.Modelo}");
-                Console.WriteLine($"Placa: {o.Placa}");
-                Console.WriteLine($"Cor: {o.Cor}");
-                Console.WriteLine($"Capacidade: {o.Capacidade}");
-                Console.WriteLine($"Observação: {o.Observacao}\n\n");
-            }
+                Console.WriteLine(o.ToString());
         }
         public static void BuscarOnibusMaiorCapacidade()
         {
@@ -184,14 +171,19 @@ namespace ConsoleApp
             OnibusDAO dao = new OnibusDAO();
             List<Onibus> onibus = dao.BuscarOnibusMaiorCapacidade();
             foreach (Onibus o in onibus)
+                Console.WriteLine(o.ToString());
+        }
+        public static void BuscarOnibusLinhas()
+        {
+            Console.WriteLine("----------Onibus mais utilizado em linhas----------\n\n\n");
+            OnibusDAO dao = new OnibusDAO();
+            List<Onibus> onibus = dao.GetOnibus();
+            foreach (Onibus o in onibus)
             {
                 Console.WriteLine($"Modelo: {o.Modelo}");
                 Console.WriteLine($"Placa: {o.Placa}");
-                Console.WriteLine($"Cor: {o.Cor}");
-                Console.WriteLine($"Capacidade: {o.Capacidade}");
-                Console.WriteLine($"Observação: {o.Observacao}\n\n");
+                Console.WriteLine($"Qtd. Linhas: {dao.CountOnibusLinha(o.IdOnibus)}\n\n");
             }
-
         }
         #endregion
 
@@ -227,16 +219,16 @@ namespace ConsoleApp
         {
             Console.WriteLine("----------LINHAS----------\n\n\n");
             LinhaDAO dao = new LinhaDAO();
-            List<Linha> linhas = dao.GetLinhasNovo();
+            List<Linha> linhas = dao.GetLinhas();
             foreach (Linha linha in linhas)
             {
                 Console.WriteLine($"Nome: {linha.Nome}");
                 Console.WriteLine($"Trajeto: {linha.Trajeto}");
-                if(linha.Onibus != null)
+                if (linha.Onibus != null)
                     Console.WriteLine($"Onibus Placa: {linha.Onibus.Placa}");
                 else
                     Console.WriteLine("Linha sem Ônibus");
-                if(linha.Motorista != null)
+                if (linha.Motorista != null)
                     Console.WriteLine($"Motorista: {linha.Motorista.Nome} - CNH: {linha.Motorista.Cnh}\n\n");
                 else
                     Console.WriteLine("Linha sem Motorista\n\n");

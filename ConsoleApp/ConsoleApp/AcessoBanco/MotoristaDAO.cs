@@ -1,6 +1,5 @@
 ﻿using ConsoleApp.Model;
 using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace ConsoleApp
                 List<Motorista> motoristas = conn.Query<Motorista>("SELECT * FROM Motorista").ToList();
                 return motoristas;
             }
-           
+
         }
 
         public void AdicionarMotorista(Motorista motorista)
@@ -28,7 +27,7 @@ namespace ConsoleApp
                 string sql = string.Format("INSERT INTO Motorista ({0})", ParametrosInsert);
                 conn.Execute(sql, PreencherParametros(motorista));
             }
-                
+
         }
 
         public List<Motorista> BuscarMotoristaPelaCapacidade(int capacidade)
@@ -67,39 +66,5 @@ namespace ConsoleApp
 
             };
         }
-
-//        select m.nome, m.cnh from Motorista m inner join Linha l on m.idMotorista = l.idLinha,
-//Onibus o where o.idOnibus = l.idOnibus and o.idOnibus IN
-//(select idOnibus from Onibus where capacidade >= ALL(select capacidade from Onibus))
-
-
-            //public IEnumerable<Motorista> GetMotoristas()
-            //{
-            //    List<Motorista> usuarios = new List<Motorista>();
-            //    using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
-            //    {
-            //        conn.Open();
-            //        string sql = "SELECT * FROM Motorista";
-
-            //        using (SqlCommand command = new SqlCommand(sql, conn))
-            //        {
-            //            SqlDataReader reader = command.ExecuteReader();
-
-            //            while (reader.Read())
-            //            {
-            //                usuarios.Add(new Motorista
-            //                {
-            //                    Cnh = (long)reader["cnh"],
-            //                    Nome = reader["nome"].ToString(),
-            //                    DtNascimento = (DateTime)reader["dtNascimento"],
-            //                    Email = reader["email"].ToString(),
-            //                    Ativo = (bool)reader["ativo"]
-            //                });
-            //            }
-
-            //            return usuarios;
-            //        }
-            //    }
-            //}
-        }
+    }
 }

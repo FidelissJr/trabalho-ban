@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp.Model
 {
@@ -27,6 +23,16 @@ namespace ConsoleApp.Model
         public string Email { get; set; }
         public bool Ativo { get; set; }
         public DateTime DtNascimento { get; set; }
+        public override string ToString()
+        {
+            return
+                $"Id: {IdMotorista}\n" +
+                $"Nome: {Nome}\n" +
+                $"Cnh: {Cnh}\n" +
+                $"Email: {Email}\n" +
+                $"Ativo: {Ativo}\n" +
+                $"Data de Nascimento: {DtNascimento.ToString("d")}\n\n";
+        }
 
     }
 }

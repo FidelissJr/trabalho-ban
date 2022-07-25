@@ -3,25 +3,13 @@ using Dapper;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace ConsoleApp.AcessoBanco
 {
     public class LinhaDAO
     {
         private const string CONNECTION_STRING = @"Server=192.168.2.184\SQLEXPRESS;Database=Rodoviaria;User Id=sa;Password=sa@123;";
-
         public List<Linha> GetLinhas()
-        {
-            using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
-            {
-                var linhas = conn.Query<Linha>("select* from Linha l LEFT JOIN Onibus o on o.idOnibus = l.idOnibus LEFT JOIN Motorista m ON l.idMotorista = m.idMotorista").ToList();
-
-                return linhas;
-            }
-
-        }
-        public List<Linha> GetLinhasNovo()
         {
             using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
             {

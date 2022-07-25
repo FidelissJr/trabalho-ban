@@ -1,11 +1,9 @@
 ﻿using ConsoleApp.Model;
 using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp.AcessoBanco
 {
@@ -28,7 +26,8 @@ namespace ConsoleApp.AcessoBanco
             using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
             {
                 string sql = string.Format("INSERT INTO Onibus ({0})", ParametrosInsert);
-                conn.Execute(sql, new Onibus {
+                conn.Execute(sql, new Onibus
+                {
                     IdOnibus = onibus.IdOnibus,
                     Placa = onibus.Placa,
                     Observacao = onibus.Observacao,
@@ -49,6 +48,22 @@ namespace ConsoleApp.AcessoBanco
 
         }
 
+        //public List<Onibus> BuscarOnibusLinhas()
+        //{
+        //    using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
+        //    {
+        //        List<Onibus> onibus = conn.Query<Onibus>("SELECT idOnibus, COUNT(idLinha) AS capacidade FROM Linha GROUP BY idOnibus ORDER BY COUNT(idOnibus) DESC;").ToList();
+        //        return onibus;
+        //    }
+        //}
+
+        public int CountOnibusLinha(int idOnibus)
+        {
+            using (SqlConnection conn = new SqlConnection(CONNECTION_STRING))
+            {
+                return conn.Query<int>("SELECT COUNT(*) FROM Linha WHERE idOnibus = @IdOnibus", new { IdOnibus = idOnibus }).FirstOrDefault();
+            }
+        }
         private string ParametrosInsert
         {
             get
@@ -59,6 +74,6 @@ namespace ConsoleApp.AcessoBanco
                 sb.Append("@Placa, @Observacao, @Cor, @Modelo, @Capacidade");
                 return sb.ToString();
             }
-        }      
+        }
     }
 }
